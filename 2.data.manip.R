@@ -14,7 +14,13 @@
 # 3) .....
 
 # === 1) read raw data =========================================================
+# reading data
+movie_data <- read.csv("movies.csv")
+rating_data <- read.csv("ratings.csv")
 
+# inspecting data
+head(movie_data)
+head(rating_data)
 
 # === 2) outliers ==============================================================
 
