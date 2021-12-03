@@ -1,20 +1,12 @@
 
 # === general ==================================================================
 
-## 1.main.R 
-## the first file a user should use and run as it contains information  critical
-## to run the whole project
-# authors:
+# authors: Sacha, Jacob, Tristan and Sofia
 # 
 # R version
-R.version.string
 # "R version 4.1.2 (2021-11-01)"
-#
 # NOTE: run the 1.main.R before starting your session.
 #
-## the '##' are extra comments, delete when using this as template
-## use the icon with horizontal lines next to source at the top of this window
-## to get the table of content 
 
 # === notes ====================================================================
 
@@ -28,13 +20,9 @@ R.version.string
 #
 # === script index =============================================================
 
-## the different script files of your analysis workflow
-## numbering names will make sure they are nicely ordered
 # 1.main.R        
 # 2.data.manip.R
 # 3.analysis.R
-## for big projects you may want to have multiple analysis files
-## big project may also require you to write and store functions in a script
 # 4.functions.R
 ## and this can apply to figure functions too
 # 5.figures.R
@@ -50,11 +38,16 @@ wk.dir <- getwd() # location of thee working directory
 
 # === libraries ================================================================
 
-# install libraries needed for the project
-#install.packages("name.of.package")
-
+# install packages needed for the project
+#install.packages('recommenderlab')
+#install.packages('ggplot2')
+#install.packages('data.table')
+#install.packages('reshape2')
 # load the libraries needed for the project to run 
-#library(name.of.package) #....
+# library('recommenderlab')
+# library('ggplot2')
+# library('data.table')
+# library('reshape2')
 
 # === folder management ========================================================
 
@@ -73,8 +66,6 @@ for(i in 1:length(folder.names)){
 }
 
 # ******************************************************************************
-## you need to store in an object the file path to these folders so we can 
-## read from them and write to them.
 
 # paths to the folders. The 'p.' indicates the variable is a path.
 # make sure the variable names describe the folder.names
