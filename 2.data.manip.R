@@ -73,7 +73,9 @@ ratingMatrix <- as.matrix(ratingMatrix[,-1])
 ratingMatrix <- as(ratingMatrix, "realRatingMatrix")
 ratingMatrix
 head(ratingMatrix)
-?dcast
+library(recommenderlab)
+install.packages("irlba")
+library("irlba")
 #___ end _______________________________________________________________________
 
 
