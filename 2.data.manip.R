@@ -143,6 +143,31 @@ qplot(average_ratings, fill=I("steelblue"), col=I("red")) +
 normalized_ratings <- normalize(movie_ratings)
 sum(rowMeans(normalized_ratings) > 0.00001)
 
+# looking at top 95 percentile users and movies
+binary_minimum_movies <- quantile(rowCounts(movie_ratings), 0.95)
+binary_minimum_users <- quantile(colCounts(movie_ratings), 0.95)
+# binarizing good rated movies 
+good_rated_films <- binarize(movie_ratings, minRating = 3)
+
+# === 6) ..... =================================================================
+# taking a sample of 420, 
+sampled_data<- sample(x = c(TRUE, FALSE),
+                      size = nrow(movie_ratings), # nrow = 420
+                      replace = TRUE,
+                      prob = c(0.8, 0.2))
+
+training_data <- movie_ratings[sampled_data, ]
+testing_data <- movie_ratings[!sampled_data, ]
+
+recommendation_system <- recommenderRegistry$get_entries(dataType ="realRatingMatrix")
+recommendation_system$IBCF_realRatingMatrix$parameters
+
+recommen_model <- Recommender(data = training_data,
+                              method = "IBCF",
+                              parameter = list(k = 30))
+recommen_model
+class(recommen_model)
+
 #___ end _______________________________________________________________________
 
 
