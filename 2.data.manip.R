@@ -71,11 +71,78 @@ ratingMatrix <- dcast(rating_data, userId~movieId, value.var = "rating", na.rm=F
 ratingMatrix <- as.matrix(ratingMatrix[,-1]) 
 # Converting rating matrix into a recommenderlab sparse matrix
 ratingMatrix <- as(ratingMatrix, "realRatingMatrix")
-ratingMatrix
 head(ratingMatrix)
-library(recommenderlab)
-install.packages("irlba")
-library("irlba")
+
+# === 4) ..... =================================================================
+# setting up parameters for building the recommendation system
+recommendation_model <- recommenderRegistry$get_entries(dataType = "realRatingMatrix")
+names(recommendation_model)
+
+lapply(recommendation_model, "[[", "description")
+
+recommendation_model$IBCF_realRatingMatrix$parameters
+
+# === 5) ..... =================================================================
+# setting up a similarity matrix for users that uses cosine method to measure 
+# how similar 2 users are
+similarity_mat <- similarity(ratingMatrix[1:4, ],
+                             method = "cosine",
+                             which = "users")
+as.matrix(similarity_mat)
+# generating visualization of the matrix
+image(as.matrix(similarity_mat), main = "User's Similarities")
+
+# same process but for movie similarity
+movie_similarity <- similarity(ratingMatrix[, 1:4], method =
+                                 "cosine", which = "items")
+as.matrix(movie_similarity)
+image(as.matrix(movie_similarity), main = "Movies similarity")
+
+# extracting values from the matrix so the unique ones can be counted
+rating_values <- as.vector(ratingMatrix@data)
+unique(rating_values)
+
+# creating a count of movie ratings
+Table_of_Ratings <- table(rating_values) 
+Table_of_Ratings
+
+# counting views for each movie
+movie_views <- colCounts(ratingMatrix) 
+
+# create a data frame of views
+table_views <- data.frame(movie = names(movie_views),
+                          views = movie_views)
+
+# sorting the data frame by number of views
+table_views <- table_views[order(table_views$views,
+                                 decreasing = TRUE), ] 
+
+# adding a new empty column to data the data frame
+table_views$title <- NA
+
+# creating a loop that will fill in every row with the movie title
+for (index in 1:10325){
+  table_views[index,3] <- as.character(subset
+                                       (movie_data,
+                                        movie_data$movieId == table_views[index,1])$title)
+}
+head(table_views)
+
+movie_ratings <- ratingMatrix[rowCounts(ratingMatrix) > 50,
+                              colCounts(ratingMatrix) > 50]
+# looking at top 98 percentile users and movies
+minimum_movies<- quantile(rowCounts(movie_ratings), 0.98)
+minimum_users <- quantile(colCounts(movie_ratings), 0.98)
+
+average_ratings <- rowMeans(movie_ratings)
+# displaying distribution of the average rating per user
+qplot(average_ratings, fill=I("steelblue"), col=I("red")) +
+  ggtitle("Distribution of the average rating per user")
+
+# normalizing movie data 
+normalized_ratings <- normalize(movie_ratings)
+sum(rowMeans(normalized_ratings) > 0.00001)
+
 #___ end _______________________________________________________________________
 
 
