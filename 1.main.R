@@ -43,12 +43,16 @@ wk.dir <- getwd() # location of thee working directory
 #install.packages('ggplot2')
 #install.packages('data.table')
 #install.packages('reshape2')
+#install.packages("irlba")
+#install.packages("digest")
 # load the libraries needed for the project to run 
 # library('recommenderlab')
 # library('ggplot2')
 # library('data.table')
 # library('reshape2')
-
+# library(recommenderlab)
+# library("irlba")
+# library(digest)
 # === folder management ========================================================
 
 ## names of project folders("a.figures","b.data.raw","c.data.clean","d.results")
