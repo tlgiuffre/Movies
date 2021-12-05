@@ -150,23 +150,64 @@ binary_minimum_users <- quantile(colCounts(movie_ratings), 0.95)
 good_rated_films <- binarize(movie_ratings, minRating = 3)
 
 # === 6) ..... =================================================================
-# taking a sample of 420, 
+# taking a sample of 420, assigning true to 80% and false to the rest
 sampled_data<- sample(x = c(TRUE, FALSE),
                       size = nrow(movie_ratings), # nrow = 420
                       replace = TRUE,
                       prob = c(0.8, 0.2))
 
+# creating training data for the AI program and testing data (which are not the 
+# same) to see if the model works
 training_data <- movie_ratings[sampled_data, ]
 testing_data <- movie_ratings[!sampled_data, ]
 
+# setting parameters for recommendation system
 recommendation_system <- recommenderRegistry$get_entries(dataType ="realRatingMatrix")
 recommendation_system$IBCF_realRatingMatrix$parameters
 
+# using recommendation model
 recommen_model <- Recommender(data = training_data,
                               method = "IBCF",
                               parameter = list(k = 30))
-recommen_model
+# defining an s4 class for object oriented programming
 class(recommen_model)
+
+# === 7) ..... =================================================================
+# looking at info about the model 
+model_info <- getModel(recommen_model)
+# defining an s4 class for object oriented programming
+class(model_info$sim)
+# checking the dimensions of the model 
+dim(model_info$sim)
+# setting top items to 20
+top_items <- 20
+
+sum_rows <- rowSums(model_info$sim > 0)
+table(sum_rows)
+sum_cols <- colSums(model_info$sim > 0)
+
+# the number of movies to recommend to each user
+top_recommendations <- 10 
+# building a prediction thing for 10 recommendations for 73 users 
+predicted_recommendations <- predict(object = recommen_model,
+                                     newdata = testing_data,
+                                     n = top_recommendations)
+# recommendation for the first user
+user1 <- predicted_recommendations@items[[1]] 
+# getting movie recommendations in character form
+movies_user1 <- predicted_recommendations@itemLabels[user1]
+# getting the titles of the recommended movies
+movies_user2 <- movies_user1
+
+for (index in 1:10){
+  movies_user2[index] <- as.character(subset(movie_data,
+                                             movie_data$movieId == movies_user1[index])$title)
+}
+
+# creating matrix with the recommendations for each user
+recommendation_matrix <- sapply(predicted_recommendations@items,
+                                function(x){ as.integer(colnames(movie_ratings)[x]) }) 
+recommendation_matrix[,1:4]
 
 #___ end _______________________________________________________________________
 
