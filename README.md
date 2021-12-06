@@ -24,13 +24,17 @@ We then went on to set up a UI for user input to curate movie recommendations ba
 # Summary of Results:
 Our group set out to create a program to provide movie recommendations based on similiar users content consumption and ratings. Recommendation systems using machine learning have become prevalent in many aspects of life and are particuilarily useful for scaling large amounts of data. The main example we looked at was the utilization of this system in Subscription Streaming Entertainment Services. These services use recommendation systems to curate content to individuals based on their user data and those of users who have viewed similiar content to recommend future content consumption. 
 
+# Limitations
 
+One limitation to our project was the dataset we used, we struggled to find ways to expand the scope of our project because we were limited to the information availiable (or rather not avaliable) in the dataset. I.e. we were interested in generally seeing what genres of movies are consumed at different times of the year, or how weather impacts what genres are consumed but we couldn't connect our movie data with other temporal or geographical data.  
 
-Limitations
+***Another limitation was due to time constraints we decided not to start our project from scratch but rather expand on previous work done on the topic to further our own understanding and develop the scope of our code.*** 
 
-Future projects/ ways to expand our code, applications of Recommendation 
+Future projects could aim to expand on our work by incoporating it into a live data base (like the Quest Movie Criteon Library ((which is no longer a thing)) to provide recommendations on an ongoing basis for users in realtime based on what is avaliable within the library (essentially adding the recommendation system to a platform like a netflix to curate content recommendations).  
 
-Bibliography
+This could also be expanded to apply recommendations across content types using other databases (i.e. since you liked X movie, you might like Y book)
+
+# Bibliography
 
 Machine Learning Project—Data Science Movie Recommendation System Project in R. (2019, July 27). DataFlair. https://data-flair.training/blogs/data-science-r-movie-recommendation/
 
