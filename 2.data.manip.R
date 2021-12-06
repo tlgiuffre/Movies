@@ -83,6 +83,10 @@ lapply(recommendation_model, "[[", "description")
 
 recommendation_model$IBCF_realRatingMatrix$parameters
 
+# setting parameters for recommendation system
+recommendation_system <- recommenderRegistry$get_entries(dataType ="realRatingMatrix")
+recommendation_system$IBCF_realRatingMatrix$parameters
+
 # === 5) creating similarity matrices ==========================================
 # setting up a similarity matrix for users that uses cosine method to measure 
 # how similar 2 users are
@@ -105,7 +109,7 @@ unique(rating_values)
 
 # === 6) counting ratings and views ============================================
 # creating a count of movie ratings
-table_of_ratings <- table(rating_values) 
+# table_of_ratings <- table(rating_values) 
 
 # counting views for each movie
 movie_views <- colCounts(ratingMatrix)
@@ -122,19 +126,18 @@ table_views <- table_views[order(table_views$views,
 table_views$title <- NA
 
 # creating a loop that will fill in every row with the movie title
-for (index in 1: number_of_movies){
+for (index in 1: nrow(table_views)){
   table_views[index,3] <- as.character(subset
                                        (movie_data,
                                         movie_data$movieId == table_views[index,1])$title)
 }
 
 head(table_views)
-
 movie_ratings <- ratingMatrix[rowCounts(ratingMatrix) > 50,
                               colCounts(ratingMatrix) > 50]
-# looking at top 98 percentile users and movies
-minimum_movies<- quantile(rowCounts(movie_ratings), 0.98)
-minimum_users <- quantile(colCounts(movie_ratings), 0.98)
+# # looking at top 98 percentile users and movies
+# minimum_movies<- quantile(rowCounts(movie_ratings), 0.98)
+# minimum_users <- quantile(colCounts(movie_ratings), 0.98)
 
 average_ratings <- rowMeans(movie_ratings)
 # displaying distribution of the average rating per user
@@ -145,13 +148,13 @@ qplot(average_ratings, fill=I("steelblue"), col=I("red")) +
 normalized_ratings <- normalize(movie_ratings)
 sum(rowMeans(normalized_ratings) > 0.00001)
 
-# looking at top 95 percentile users and movies
-binary_minimum_movies <- quantile(rowCounts(movie_ratings), 0.95)
-binary_minimum_users <- quantile(colCounts(movie_ratings), 0.95)
-# binarizing good rated movies 
-good_rated_films <- binarize(movie_ratings, minRating = 3)
+# # looking at top 95 percentile users and movies
+# binary_minimum_movies <- quantile(rowCounts(movie_ratings), 0.95)
+# binary_minimum_users <- quantile(colCounts(movie_ratings), 0.95)
+# # binarizing good rated movies 
+# good_rated_movies <- binarize(movie_ratings, minRating = 3)
 
-# === 6) setting up the AI =====================================================
+# === 7) setting up the AI =====================================================
 # taking a sample of 420, assigning true to 80% and false to the rest
 sampled_data<- sample(x = c(TRUE, FALSE),
                       size = nrow(movie_ratings),
@@ -163,10 +166,6 @@ sampled_data<- sample(x = c(TRUE, FALSE),
 training_data <- movie_ratings[sampled_data, ]
 testing_data <- movie_ratings[!sampled_data, ]
 
-# setting parameters for recommendation system
-recommendation_system <- recommenderRegistry$get_entries(dataType ="realRatingMatrix")
-recommendation_system$IBCF_realRatingMatrix$parameters
-
 # using recommendation model
 recommen_model <- Recommender(data = training_data,
                               method = "IBCF",
@@ -174,15 +173,13 @@ recommen_model <- Recommender(data = training_data,
 # defining an s4 class for object oriented programming
 class(recommen_model)
 
-# === 7) recommending movies ===================================================
+# === 8) recommending movies ===================================================
 # looking at info about the model 
 model_info <- getModel(recommen_model)
 # defining an s4 class for object oriented programming
 class(model_info$sim)
 # checking the dimensions of the model 
 dim(model_info$sim)
-# setting top items to 20
-top_items <- 20
 
 sum_rows <- rowSums(model_info$sim > 0)
 table(sum_rows)
@@ -197,19 +194,19 @@ predicted_recommendations <- predict(object = recommen_model,
 # recommendation for the first user
 user1 <- predicted_recommendations@items[[1]] 
 # getting movie recommendations in character form
-movies_user1 <- predicted_recommendations@itemLabels[user1]
+recommended_movies <- predicted_recommendations@itemLabels[user1]
 # getting the titles of the recommended movies
-movies_user2 <- movies_user1
+recommended_movie_titles <- recommended_movies
 
-for (index in 1:10){
-  movies_user2[index] <- as.character(subset(movie_data,
-                                             movie_data$movieId == movies_user1[index])$title)
-}
-
-# creating matrix with the recommendations for each user
-recommendation_matrix <- sapply(predicted_recommendations@items,
-                                function(x){ as.integer(colnames(movie_ratings)[x]) }) 
-recommendation_matrix[,1:4]
+# for (index in 1:10){
+#   recommended_movie_titles[index] <- as.character(subset(movie_data,
+#                                              movie_data$movieId == recommended_movies[index])$title)
+# }
+# 
+# # creating matrix with the recommendations for each user
+# recommendation_matrix <- sapply(predicted_recommendations@items,
+#                                 function(x){ as.integer(colnames(movie_ratings)[x]) }) 
+# recommendation_matrix[,1:4]
 
 #___ end _______________________________________________________________________
 
