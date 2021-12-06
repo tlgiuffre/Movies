@@ -17,6 +17,8 @@ rating_data <- read.csv("ratings.csv")
 head(movie_data)
 head(rating_data)
 
+tail(rating_data)
+
 # === 2) creating data frame for genre =========================================
 # creating a data frame of movie genres pulled out of the movie data frame
 movie_genre <- as.data.frame(movie_data$genres, stringsAsFactors=FALSE)
