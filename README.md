@@ -9,11 +9,12 @@ Can we use user data (similiar to what is done by Subscription Streaming Enterta
 
 # Description:
 
-Streaming services like Netflix, Hulu, Amazon Prime, etc. offer users content recommendations based on previous watches and trending films/shows. Our group has set out to create our own reccomendation system based on user preferences and browsing history using machine learning and the MovieLens dataset. This dataset consists of 105339 ratings applied over 10329 movies. Our reccomendation system will utilize this dataset and user data to provide individualized reccomendations for future content consumption. 
+Recommendation systems using Machine Learning have many applications across manyvarying industries.  Subscription Streaming Entertainment Services like Netflix, Hulu, Amazon Prime, etc. offer users content recommendations based on previous watches and trending films/shows. Our group has set out to create our own reccomendation system based on user preferences and browsing history using machine learning and the MovieLens dataset. This dataset consists of 105339 ratings applied over 10329 movies. Our reccomendation system will utilize this dataset and user data to provide individualized reccomendations for future content consumption. 
 
 # Outline/Workflow:
+We decided to take on this project for a number of reasons; namely, because we found a lot of resources related to the topic online and are all implictly involved in these types of systems in our own lives (i.e. we all use a variation of these Subscription Streaming Entertainment Services).
 
-Upload and Retrieve Datasets > Inspect Data > Build Genre Matrices > Is this what the outline/workflow should look like????
+Our approach was to first do some brief googling to hone into our exact topic. Next we had to find datasets (wouldn't be much of a data challenge w/out data...)this provided the foundation to begin working in R. 
 
 # Summary of Results:
 
