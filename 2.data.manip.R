@@ -1,8 +1,12 @@
 
 # === description ===========================================================================
-# this file creates similarity matrices between movies and then a system that 
-# looks at ratings and views from each user to generate recommendations
-
+# Streaming services like Netflix, Amazon Prime, Hulu, etc. offer users content 
+# recommendations based on previous watches and trending films/shows. Our group 
+# has set out to create our own Reccomendation system based on user preferences 
+# and browsing history using machine learning and the MovieLens dataset. This 
+# dataset consists of 105339 ratings applied over 10329 movies. Our reccomendation 
+# system will utilize this dataset and user data to provide reccomendatiosn for 
+# future content consumption.
 
 # === 1) read raw data =========================================================
 # reading data
