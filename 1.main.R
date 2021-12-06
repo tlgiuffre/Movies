@@ -33,8 +33,9 @@
 ## changed. For example names, or a range of e.g. dates selected, etc
 
 wk.dir <- getwd() # location of thee working directory
-## var.name.1 <- "something" # important variable doing....
-## var.name.2 <- "something.different" #
+number_of_movies <- nrow(movie_data)
+number_of_genres <- length(list_genre)
+number_of_reviews <- nrow(rating_data)
 
 # === libraries ================================================================
 
@@ -78,7 +79,7 @@ p.data.clean <- paste(wk.dir, "/", folder.names[2], "/", sep = "")
 p.results <- paste(wk.dir, "/", folder.names[3], "/", sep = "")
 p.fig <- paste(wk.dir, "/", folder.names[4], "/", sep = "")
 
-# === run script ==============================================================
+# === run script ===============================================================
 
 ## you can run a scripts file as a batch the start. Only do this for code which  
 ## is really needed to run other script files. Take care not to force the user
