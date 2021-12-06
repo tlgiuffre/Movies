@@ -1,17 +1,8 @@
 
 # === description ===========================================================================
-## brief description what the script file is about
-#
+# this file creates similarity matrices between movies and then a system that 
+# looks at ratings and views from each user to generate recommendations
 
-## if you have clear chunks of code, use collapsible dividers (# ==== or # ----)
-## and number the sections. Provide brief description for each section here
-## # ***** or #_____ does not make sections 
-
-# ******************************************************************************
-## use descriptive names 
-# 1) read raw data  load data from clean data folder and ...
-# 2) outliers      test for outliers and entryr errors
-# 3) .....
 
 # === 1) read raw data =========================================================
 # reading data
@@ -108,8 +99,6 @@ rating_values <- as.vector(ratingMatrix@data)
 unique(rating_values)
 
 # === 6) counting ratings and views ============================================
-# creating a count of movie ratings
-# table_of_ratings <- table(rating_values) 
 
 # counting views for each movie
 movie_views <- colCounts(ratingMatrix)
@@ -135,9 +124,6 @@ for (index in 1: nrow(table_views)){
 head(table_views)
 movie_ratings <- ratingMatrix[rowCounts(ratingMatrix) > 50,
                               colCounts(ratingMatrix) > 50]
-# # looking at top 98 percentile users and movies
-# minimum_movies<- quantile(rowCounts(movie_ratings), 0.98)
-# minimum_users <- quantile(colCounts(movie_ratings), 0.98)
 
 average_ratings <- rowMeans(movie_ratings)
 # displaying distribution of the average rating per user
@@ -148,11 +134,6 @@ qplot(average_ratings, fill=I("steelblue"), col=I("red")) +
 normalized_ratings <- normalize(movie_ratings)
 sum(rowMeans(normalized_ratings) > 0.00001)
 
-# # looking at top 95 percentile users and movies
-# binary_minimum_movies <- quantile(rowCounts(movie_ratings), 0.95)
-# binary_minimum_users <- quantile(colCounts(movie_ratings), 0.95)
-# # binarizing good rated movies 
-# good_rated_movies <- binarize(movie_ratings, minRating = 3)
 
 # === 7) setting up the AI =====================================================
 # taking a sample of 420, assigning true to 80% and false to the rest
@@ -198,6 +179,29 @@ recommended_movies <- predicted_recommendations@itemLabels[user1]
 # getting the titles of the recommended movies
 recommended_movie_titles <- recommended_movies
 
+#___ end _______________________________________________________________________
+
+
+
+
+
+# === 9) commented out =========================================================
+# this section is commented out because we are too scared to delete it but is not 
+# necessary to run the program
+
+# creating a count of movie ratings
+# table_of_ratings <- table(rating_values) 
+
+# # looking at top 98 percentile users and movies
+# minimum_movies<- quantile(rowCounts(movie_ratings), 0.98)
+# minimum_users <- quantile(colCounts(movie_ratings), 0.98)
+
+# # looking at top 95 percentile users and movies
+# binary_minimum_movies <- quantile(rowCounts(movie_ratings), 0.95)
+# binary_minimum_users <- quantile(colCounts(movie_ratings), 0.95)
+# # binarizing good rated movies 
+# good_rated_movies <- binarize(movie_ratings, minRating = 3)
+
 # for (index in 1:10){
 #   recommended_movie_titles[index] <- as.character(subset(movie_data,
 #                                              movie_data$movieId == recommended_movies[index])$title)
@@ -207,9 +211,3 @@ recommended_movie_titles <- recommended_movies
 # recommendation_matrix <- sapply(predicted_recommendations@items,
 #                                 function(x){ as.integer(colnames(movie_ratings)[x]) }) 
 # recommendation_matrix[,1:4]
-
-#___ end _______________________________________________________________________
-
-
-
-
