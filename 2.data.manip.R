@@ -22,47 +22,47 @@ rating_data <- read.csv("ratings.csv")
 head(movie_data)
 head(rating_data)
 
-# === 2) creating data frames for genre ========================================
+# === 2) creating data frame for genre =========================================
 # creating a data frame of movie genres pulled out of the movie data frame
 movie_genre <- as.data.frame(movie_data$genres, stringsAsFactors=FALSE)
 # separates genres into columns (rather than by lines)
-movie_genre2 <- as.data.frame(tstrsplit(movie_genre[,1], '[|]', 
+movie_genre_tidy <- as.data.frame(tstrsplit(movie_genre[,1], '[|]', 
                                         type.convert=TRUE), 
                               stringsAsFactors=FALSE) 
 # naming columns of the genre data frame
-colnames(movie_genre2) <- c(1:10)
+colnames(movie_genre_tidy) <- c(1:10)
 # creating a list of all genres
 list_genre <- c("Action", "Adventure", "Animation", "Children", 
                 "Comedy", "Crime","Documentary", "Drama", "Fantasy",
                 "Film-Noir", "Horror", "Musical", "Mystery","Romance",
                 "Sci-Fi", "Thriller", "War", "Western")
 # creating an empty matrix (10330 rows and 18 columns filled with 0)
-genre_mat1 <- matrix(0,10330,18)
+genre_matrix <- matrix(0,(number_of_movies+1),number_of_genres)
 # making our genre list the names of each column
-colnames(genre_mat1) <- list_genre
+colnames(genre_matrix) <- list_genre
 # filling in the first row with the same headers (for the loop)
-genre_mat1[1,] <- list_genre
+genre_matrix[1,] <- list_genre
 # starting  loop that goes through every column of every row
-for (index in 1:nrow(movie_genre2)) {
-  for (col in 1:ncol(movie_genre2)) {
+for (row in 1:nrow(movie_genre_tidy)) {
+  for (col in 1:ncol(movie_genre_tidy)) {
     #Creates a new name for each cell, and then assigns a value of 1 if it matches
     #E.X. if a movie has action, it gets a 1 under action, but can be searched for
     #action as well.
-    gen_col = which(genre_mat1[1,] == movie_genre2[index,col]) 
-    genre_mat1[index+1,gen_col] <- 1
+    gen_col = which(genre_matrix[1,] == movie_genre_tidy[index,col]) 
+    genre_matrix[index+1,gen_col] <- 1
   }
 }
 # removing first row, which was the genre list
-genre_mat2 <- as.data.frame(genre_mat1[-1,], stringsAsFactors=FALSE)
-head(genre_mat2)
+genre_data_frame <- as.data.frame(genre_matrix[-1,], stringsAsFactors=FALSE)
+head(genre_data_frame)
 # converting from characters to integers
-for (col in 1:ncol(genre_mat2)) {
-  genre_mat2[,col] <- as.integer(genre_mat2[,col]) 
+for (col in 1:ncol(genre_data_frame)) {
+  genre_data_frame[,col] <- as.integer(genre_data_frame[,col]) 
 } 
 # checking str (to make sure we have integers now)
-str(genre_mat2)
+str(genre_data_frame)
 # adding movie id and movie title to genre matrix 2
-SearchMatrix <- cbind(movie_data[,1:2], genre_mat2[])
+SearchMatrix <- cbind(movie_data[,1:2], genre_data_frame[])
 head(SearchMatrix)
 
 # === 3) creating matrices for rating ==========================================
@@ -104,12 +104,11 @@ rating_values <- as.vector(ratingMatrix@data)
 unique(rating_values)
 
 # === 6) counting ratings and views ============================================
-
 # creating a count of movie ratings
-Table_of_Ratings <- table(rating_values) 
+table_of_ratings <- table(rating_values) 
 
 # counting views for each movie
-movie_views <- colCounts(ratingMatrix) 
+movie_views <- colCounts(ratingMatrix)
 
 # create a data frame of views
 table_views <- data.frame(movie = names(movie_views),
@@ -123,11 +122,12 @@ table_views <- table_views[order(table_views$views,
 table_views$title <- NA
 
 # creating a loop that will fill in every row with the movie title
-for (index in 1:10325){
+for (index in 1: number_of_movies){
   table_views[index,3] <- as.character(subset
                                        (movie_data,
                                         movie_data$movieId == table_views[index,1])$title)
 }
+
 head(table_views)
 
 movie_ratings <- ratingMatrix[rowCounts(ratingMatrix) > 50,
