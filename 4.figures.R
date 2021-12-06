@@ -35,4 +35,12 @@ ggplot(table_views[1:6, ], aes(x = title, y = views)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   ggtitle("Total Views of the Top Films")
 
+#heat map of 95 percentile users and movies 
+binary_minimum_movies <- quantile(rowCounts(movie_ratings), 0.)
+binary_minimum_users <- quantile(colCounts(movie_ratings), 0.95, 0.95)
+image(movie_ratings[rowCounts(movie_ratings) > minimum_movies,
+                    colCounts(movie_ratings) > minimum_users],
+      main = "Heatmap of the top users and movies")
+
+
 
