@@ -22,7 +22,7 @@ rating_data <- read.csv("ratings.csv")
 head(movie_data)
 head(rating_data)
 
-# === 2) creating data frames ==================================================
+# === 2) creating data frames for genre ========================================
 # creating a data frame of movie genres pulled out of the movie data frame
 movie_genre <- as.data.frame(movie_data$genres, stringsAsFactors=FALSE)
 # separates genres into columns (rather than by lines)
@@ -64,7 +64,8 @@ str(genre_mat2)
 # adding movie id and movie title to genre matrix 2
 SearchMatrix <- cbind(movie_data[,1:2], genre_mat2[])
 head(SearchMatrix)
-# === 3) ..... =================================================================
+
+# === 3) creating matrices for rating ==========================================
 # creating a new data frame in which each column is a movie
 ratingMatrix <- dcast(rating_data, userId~movieId, value.var = "rating", na.rm=FALSE)
 # removing userIds
@@ -73,7 +74,7 @@ ratingMatrix <- as.matrix(ratingMatrix[,-1])
 ratingMatrix <- as(ratingMatrix, "realRatingMatrix")
 head(ratingMatrix)
 
-# === 4) ..... =================================================================
+# === 4) setting system parameters =============================================
 # setting up parameters for building the recommendation system
 recommendation_model <- recommenderRegistry$get_entries(dataType = "realRatingMatrix")
 names(recommendation_model)
@@ -82,7 +83,7 @@ lapply(recommendation_model, "[[", "description")
 
 recommendation_model$IBCF_realRatingMatrix$parameters
 
-# === 5) ..... =================================================================
+# === 5) creating similarity matrices ==========================================
 # setting up a similarity matrix for users that uses cosine method to measure 
 # how similar 2 users are
 similarity_mat <- similarity(ratingMatrix[1:4, ],
@@ -102,9 +103,10 @@ image(as.matrix(movie_similarity), main = "Movies similarity")
 rating_values <- as.vector(ratingMatrix@data)
 unique(rating_values)
 
+# === 6) counting ratings and views ============================================
+
 # creating a count of movie ratings
 Table_of_Ratings <- table(rating_values) 
-Table_of_Ratings
 
 # counting views for each movie
 movie_views <- colCounts(ratingMatrix) 
@@ -149,10 +151,10 @@ binary_minimum_users <- quantile(colCounts(movie_ratings), 0.95)
 # binarizing good rated movies 
 good_rated_films <- binarize(movie_ratings, minRating = 3)
 
-# === 6) ..... =================================================================
+# === 6) setting up the AI =====================================================
 # taking a sample of 420, assigning true to 80% and false to the rest
 sampled_data<- sample(x = c(TRUE, FALSE),
-                      size = nrow(movie_ratings), # nrow = 420
+                      size = nrow(movie_ratings),
                       replace = TRUE,
                       prob = c(0.8, 0.2))
 
@@ -172,7 +174,7 @@ recommen_model <- Recommender(data = training_data,
 # defining an s4 class for object oriented programming
 class(recommen_model)
 
-# === 7) ..... =================================================================
+# === 7) recommending movies ===================================================
 # looking at info about the model 
 model_info <- getModel(recommen_model)
 # defining an s4 class for object oriented programming
