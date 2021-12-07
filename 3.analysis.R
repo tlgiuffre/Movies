@@ -58,7 +58,7 @@ rating_data <- rbind(user0overwrite, temp_rating_data)
 # write a new ratings.csv
 # path might not work perfectly, but github is fighting me.
 
-write.csv(rating_data, file.path(wk.dir, "ratings.csv"))
+write.csv(rating_data, file.path(wk.dir, "ratings2.csv"))
 
 
 

@@ -41,6 +41,7 @@ genre_matrix <- matrix(0,(number_of_movies+1),number_of_genres)
 colnames(genre_matrix) <- list_genre
 # filling in the first row with the same headers (for the loop)
 genre_matrix[1,] <- list_genre
+
 # starting  loop that goes through every column of every row
 for (row in 1:nrow(movie_genre_tidy)) {
   for (col in 1:ncol(movie_genre_tidy)) {
