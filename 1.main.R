@@ -32,11 +32,19 @@
 ## declare variables that will be used across the project and should not be 
 ## changed. For example names, or a range of e.g. dates selected, etc
 
+# read both csvs to define DEFAULT variables
+# comment these out after first use, or if other values are desired
+movie_data <- read.csv("movies.csv")
+rating_data <- read.csv("ratings.csv")
+number_of_genres <- 18
+
+
 wk.dir <- getwd() # location of thee working directory
 number_of_movies <- nrow(movie_data)
 number_of_genres <- length(list_genre)
 number_of_reviews <- nrow(rating_data)
 
+wk.dir
 # === libraries ================================================================
 
 # install packages needed for the project
@@ -46,14 +54,14 @@ number_of_reviews <- nrow(rating_data)
 #install.packages('reshape2')
 #install.packages("irlba")
 #install.packages("digest")
-# load the libraries needed for the project to run 
-# library('recommenderlab')
-# library('ggplot2')
-# library('data.table')
-# library('reshape2')
-# library(recommenderlab)
-# library("irlba")
-# library(digest)
+ #load the libraries needed for the project to run 
+ library('recommenderlab')
+ library('ggplot2')
+ library('data.table')
+ library('reshape2')
+ library(recommenderlab)
+ library("irlba")
+ library(digest)
 # === folder management ========================================================
 
 ## names of project folders("a.figures","b.data.raw","c.data.clean","d.results")
